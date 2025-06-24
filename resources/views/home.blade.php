@@ -2,7 +2,7 @@
     <x-slot:title>Home</x-slot:title>
     <!-- Hero Section -->
     <section class="bg-green-50 py-16">
-        <div class="container mx-auto px-4 lg:px-10 flex flex-col md:flex-row items-center justify-between">
+        <div class="container mx-auto px-4   lg:px-10 flex flex-col md:flex-row items-center justify-between">
             <div class="md:w-1/2 mb-8 md:mb-0">
                 <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">SEA Catering</h1>
                 <h2 class="text-2xl md:text-3xl font-semibold text-green-600 mb-6">Healthy Meals, Anytime, Anywhere</h2>
@@ -67,28 +67,134 @@
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">What Our Customers Say</h2>
             
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <div class="flex items-center mb-4">
-                        <div class="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold mr-4">A</div>
-                        <div>
-                            <h4 class="font-semibold">Andi Wijaya</h4>
-                            <p class="text-gray-500 text-sm">Jakarta</p>
+            <!-- Testimonial Carousel -->
+            <div x-data="{
+                currentIndex: 0,
+                testimonials: [
+                    {
+                        name: 'Andi Wijaya',
+                        location: 'Jakarta',
+                        rating: 5,
+                        comment: 'SEA Catering has transformed my eating habits. The meals are delicious and I\'ve never felt better!',
+                        avatar: 'A'
+                    },
+                    {
+                        name: 'Sarah Putri',
+                        location: 'Bandung',
+                        rating: 4,
+                        comment: 'As a busy professional, SEA Catering saves me so much time while ensuring I eat healthy meals every day.',
+                        avatar: 'S'
+                    },
+                    {
+                        name: 'Budi Santoso',
+                        location: 'Surabaya',
+                        rating: 5,
+                        comment: 'The customizable options are amazing. I can maintain my diet without sacrificing taste!',
+                        avatar: 'B'
+                    }
+                ],
+                next() {
+                    this.currentIndex = (this.currentIndex + 1) % this.testimonials.length;
+                },
+                prev() {
+                    this.currentIndex = (this.currentIndex - 1 + this.testimonials.length) % this.testimonials.length;
+                }
+            }" class="relative max-w-4xl mx-auto">
+                <!-- Testimonial Cards -->
+                <div class="overflow-hidden relative h-64">
+                    <template x-for="(testimonial, index) in testimonials" :key="index">
+                        <div 
+                            x-show="currentIndex === index"
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 transform scale-90"
+                            x-transition:enter-end="opacity-100 transform scale-100"
+                            x-transition:leave="transition ease-in duration-300"
+                            x-transition:leave-start="opacity-100 transform scale-100"
+                            x-transition:leave-end="opacity-0 transform scale-90"
+                            class="absolute inset-0 bg-white p-8 rounded-lg shadow-md"
+                        >
+                            <div class="flex items-center mb-4">
+                                <div class="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold mr-4" x-text="testimonial.avatar"></div>
+                                <div>
+                                    <h4 class="font-semibold" x-text="testimonial.name"></h4>
+                                    <p class="text-gray-500 text-sm" x-text="testimonial.location"></p>
+                                    <div class="flex mt-1">
+                                        <template x-for="i in 5">
+                                            <svg :class="{'text-yellow-400': i <= testimonial.rating, 'text-gray-300': i > testimonial.rating}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                            </svg>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 italic" x-text="'\"' + testimonial.comment + '\"'"></p>
                         </div>
-                    </div>
-                    <p class="text-gray-600">"SEA Catering has transformed my eating habits. The meals are delicious and I've never felt better!"</p>
+                    </template>
                 </div>
                 
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <div class="flex items-center mb-4">
-                        <div class="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold mr-4">S</div>
-                        <div>
-                            <h4 class="font-semibold">Sarah Putri</h4>
-                            <p class="text-gray-500 text-sm">Bandung</p>
+                <!-- Navigation Arrows -->
+                <button @click="prev()" class="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 bg-white p-2 rounded-full shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button @click="next()" class="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 bg-white p-2 rounded-full shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Testimonial Form -->
+            <div class="mt-16 max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-4 text-center">Share Your Experience</h3>
+                <form x-data="{
+                    formData: {
+                        name: '',
+                        rating: 0,
+                        comment: ''
+                    },
+                    hoverRating: 0,
+                    submitTestimonial() {
+                        // In a real app, this would send to backend
+                        alert('Thank you for your feedback!');
+                        this.formData = { name: '', rating: 0, comment: '' };
+                    }
+                }" @submit.prevent="submitTestimonial">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Your Name</label>
+                        <input type="text" x-model="formData.name" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Your Rating</label>
+                        <div class="flex">
+                            <template x-for="i in 5">
+                                <svg 
+                                    @click="formData.rating = i" 
+                                    @mouseover="hoverRating = i" 
+                                    @mouseleave="hoverRating = 0"
+                                    :class="{
+                                        'text-yellow-400': i <= (hoverRating || formData.rating),
+                                        'text-gray-300': i > (hoverRating || formData.rating)
+                                    }" 
+                                    class="w-8 h-8 cursor-pointer" 
+                                    fill="currentColor" 
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                            </template>
                         </div>
                     </div>
-                    <p class="text-gray-600">"As a busy professional, SEA Catering saves me so much time while ensuring I eat healthy meals every day."</p>
-                </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Your Review</label>
+                        <textarea x-model="formData.comment" required rows="4" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition">Submit Review</button>
+                </form>
             </div>
         </div>
     </section>
