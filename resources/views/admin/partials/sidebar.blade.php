@@ -1,5 +1,5 @@
 <aside x-show="sidebarOpen" x-transition
-       class="fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform lg:translate-x-0 transition duration-200 ease-in-out dark:bg-gray-800"
+       class="inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform lg:translate-x-0 transition duration-200 ease-in-out dark:bg-gray-800"
        :class="{ '-translate-x-full': !sidebarOpen }">
     <div class="flex items-center justify-between px-4 py-3 border-b dark:border-gray-700">
         <div class="flex items-center space-x-2">

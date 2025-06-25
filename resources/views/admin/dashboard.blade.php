@@ -84,10 +84,6 @@
                 <h3 class="text-lg font-medium mb-4 dark:text-white">User Growth</h3>
                 <canvas id="userGrowthChart" height="250"></canvas>
             </div>
-            <div class="bg-white rounded-lg shadow p-6 dark:bg-gray-800">
-                <h3 class="text-lg font-medium mb-4 dark:text-white">Meal Plan Distribution</h3>
-                <canvas id="mealPlanDistributionChart" height="250"></canvas>
-            </div>
         </div>
 
         <!-- Recent Orders -->
