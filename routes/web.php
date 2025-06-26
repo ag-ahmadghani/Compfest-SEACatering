@@ -1,91 +1,51 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MealPlanController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
 
 // Admin Dashboard Routes
-Route::prefix('admin')->group(function() {
+Route::prefix('dashboard')->middleware('auth')->group(function() {
     // Dashboard
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/', function () {
+        return view('dashboard.dashboard');
+    })->name('dashboard');
 
-    // Meal Plans
-    Route::prefix('meal-plans')->group(function() {
-        Route::get('/', function () {
-            return view('admin.meal-plans.index');
-        })->name('admin.meal-plans.index');
-        
-        Route::get('/create', function () {
-            return view('admin.meal-plans.create');
-        })->name('admin.meal-plans.create');
-        
-        Route::post('/', function () {
-            // In a real app, this would handle form submission
-            return redirect()->route('admin.meal-plans.index')
-                ->with('success', 'Meal plan created successfully!');
-        })->name('admin.meal-plans.store');
-        
-        Route::get('/{id}/edit', function ($id) {
-            return view('admin.meal-plans.edit', ['id' => $id]);
-        })->name('admin.meal-plans.edit');
-        
-        Route::put('/{id}', function ($id) {
-            // In a real app, this would handle form submission
-            return redirect()->route('admin.meal-plans.index')
-                ->with('success', 'Meal plan updated successfully!');
-        })->name('admin.meal-plans.update');
-        
-        Route::delete('/{id}', function ($id) {
-            // In a real app, this would delete the record
-            return redirect()->route('admin.meal-plans.index')
-                ->with('success', 'Meal plan deleted successfully!');
-        })->name('admin.meal-plans.destroy');
+    
+    // Subscriptions - Using SubscriptionController
+    Route::prefix('subscriptions')->controller(SubscriptionController::class)->group(function() {
+        Route::get('/', 'index')->name('dashboard.subscriptions.index');
+        Route::patch('/{subscription}/cancel', 'cancel')->name('dashboard.subscriptions.cancel');
     });
-
-    // Subscriptions
-    Route::prefix('subscriptions')->group(function() {
-        Route::get('/', function () {
-            return view('admin.subscriptions.index');
-        })->name('admin.subscriptions.index');
-        
-        Route::get('/create', function () {
-            return view('admin.subscriptions.create');
-        })->name('admin.subscriptions.create');
-        
-        Route::post('/', function () {
-            return redirect()->route('admin.subscriptions.index')
-                ->with('success', 'Subscription created successfully!');
-        })->name('admin.subscriptions.store');
-        
-        Route::get('/{id}/edit', function ($id) {
-            return view('admin.subscriptions.edit', ['id' => $id]);
-        })->name('admin.subscriptions.edit');
-        
-        Route::put('/{id}', function ($id) {
-            return redirect()->route('admin.subscriptions.index')
-                ->with('success', 'Subscription updated successfully!');
-        })->name('admin.subscriptions.update');
-        
-        Route::delete('/{id}', function ($id) {
-            return redirect()->route('admin.subscriptions.index')
-                ->with('success', 'Subscription deleted successfully!');
-        })->name('admin.subscriptions.destroy');
-    });
-
+    
     // Users
-    Route::prefix('users')->group(function() {
-        Route::get('/', function () {
-            return view('admin.users.index');
-        })->name('admin.users.index');
+    Route::prefix('users')->controller(UserController::class)->group(function() {
+        Route::get('/', 'index')->name('dashboard.users.index');
+        Route::get('/{user}/edit', 'edit')->name('dashboard.users.edit');
+        Route::put('/{user}', 'update')->name('dashboard.users.update');
+        Route::patch('/{user}/toggle-status', 'toggleStatus')->name('dashboard.users.toggle-status');
+    });
+    
+    Route::middleware('role:admin')->group(function () {
+        Route::prefix('subscriptions')->controller(SubscriptionController::class)->group(function() {
+            Route::get('/create', 'create')->name('dashboard.subscriptions.create');
+            Route::post('/', 'store')->name('dashboard.subscriptions.store');
+            Route::get('/{subscription}/edit', 'edit')->name('dashboard.subscriptions.edit');
+            Route::put('/{subscription}', 'update')->name('dashboard.subscriptions.update');
+        });
+        // Meal Plans - Using MealPlanController
+        Route::prefix('meal-plans')->controller(MealPlanController::class)->group(function() {
+            Route::get('/', 'index')->name('dashboard.meal-plans.index');
+            Route::get('/create', 'create')->name('dashboard.meal-plans.create');
+            Route::post('/', 'store')->name('dashboard.meal-plans.store');
+            Route::get('/{mealPlan}/edit', 'edit')->name('dashboard.meal-plans.edit');
+            Route::put('/{mealPlan}', 'update')->name('dashboard.meal-plans.update');
+            Route::delete('/{mealPlan}', 'destroy')->name('dashboard.meal-plans.destroy');
+            Route::post('/{mealPlan}/toggle-status', 'toggleStatus')->name('dashboard.meal-plans.toggle-status');
+        });
         
-        Route::get('/{id}/edit', function ($id) {
-            return view('admin.users.edit', ['id' => $id]);
-        })->name('admin.users.edit');
-        
-        Route::put('/{id}', function ($id) {
-            return redirect()->route('admin.users.index')
-                ->with('success', 'User updated successfully!');
-        })->name('admin.users.update');
     });
 });
 
@@ -94,9 +54,8 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-Route::get('/menu', function () {
-    return view('menu');
-})->name('menu');
+
+Route::get('/menu', [MealPlanController::class, 'public_show'])->name('meal-plan.public');
 
 Route::get('/subscription', function () {
     return view('subscription');
@@ -114,3 +73,16 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
+
+// Authentication Routes
+Route::controller(AuthController::class)->group(function () {
+    Route::middleware('guest')->group(function () {
+        Route::get('/register', 'showRegisterForm')->name('register');
+        Route::post('/register', 'register');
+        
+        Route::get('/login', 'showLoginForm')->name('login');
+        Route::post('/login', 'login');
+    });
+
+    Route::post('/logout', 'logout')->name('logout');
+});

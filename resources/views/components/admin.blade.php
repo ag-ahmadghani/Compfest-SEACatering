@@ -27,12 +27,12 @@
     <!-- Admin Layout -->
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        @include('admin.partials.sidebar')
+        @include('dashboard.partials.sidebar')
 
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
-            @include('admin.partials.header')
+            {{-- @include('dashboard.partials.header') --}}
 
             <!-- Main Content -->
             <main class="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50 dark:bg-gray-900">
@@ -42,6 +42,6 @@
     </div>
 
     <!-- Scripts -->
-    @include('admin.partials.scripts')
+    @include('dashboard.partials.scripts')
 </body>
 </html>

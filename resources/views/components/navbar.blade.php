@@ -12,9 +12,24 @@
             <a href="/menu" class="hover:text-green-200 transition">Menu</a>
             <a href="/subscription" class="hover:text-green-200 transition">Subscription</a>
             <a href="/contact" class="hover:text-green-200 transition">Contact Us</a>
-            <a href="/login" class="bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 transition font-medium">
+            @auth
+            <a href="/dashboard" class="hover:text-green-200 transition">Dashboard</a>
+            @endauth
+            @guest
+            <a href="/login" class="block mt-2 bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 transition font-medium text-center">
                 Login
             </a>
+            @endguest
+            @auth
+            <form action="{{ route('logout') }}" method="post" class="items-center">
+                @csrf
+                <button type="submit"
+                    class="block mt-2 bg-red-800 text-white px-4 py-2 rounded-lg hover:bg-white hover:text-red-500 transition font-medium text-center">
+                    Logout
+                </button>
+            </form>
+                
+            @endauth
         </div>
         
         <div class="md:hidden">
@@ -32,8 +47,20 @@
         <a href="/menu" class="block py-2 hover:text-green-200 transition">Menu</a>
         <a href="/subscription" class="block py-2 hover:text-green-200 transition">Subscription</a>
         <a href="/contact" class="block py-2 hover:text-green-200 transition">Contact Us</a>
+        @guest
         <a href="/login" class="block mt-2 bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 transition font-medium text-center">
             Login
         </a>
+        @endguest
+        @auth
+        <form action="{{ route('logout') }}" method="post">
+            @csrf
+            <button type="submit"
+                class="block mt-2 bg-red-800 text-white px-4 py-2 rounded-lg hover:bg-green-50 transition font-medium text-center">
+                Logout
+            </button>
+        </form>
+            
+        @endauth
     </div>
 </nav>

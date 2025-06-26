@@ -1,5 +1,11 @@
 <x-admin title="Dashboard">
     <div x-data="dashboardStats" class="space-y-6">
+        <div class="flex justify-between items-center">
+            <div>
+                <h2 class="text-2xl font-bold dark:text-white">Dashboard</h2>
+                <p class="text-gray-600 dark:text-gray-400 mt-1">manage your own dashboard</p>
+            </div>
+        </div>
         <!-- Stats Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="bg-white rounded-lg shadow p-6 dark:bg-gray-800">
