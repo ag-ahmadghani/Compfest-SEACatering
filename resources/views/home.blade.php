@@ -11,7 +11,9 @@
                     Start your journey to better eating with our nutritious and delicious meal plans.
                 </p>
                 <div class="flex space-x-4">
+                    @guest
                     <a href="/subscription" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition">Get Started</a>
+                    @endguest
                     <a href="/menu" class="border border-green-600 text-green-600 hover:bg-green-50 px-6 py-3 rounded-lg font-medium transition">View Menu</a>
                 </div>
             </div>
@@ -62,7 +64,7 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
+        <!-- Testimonials Section -->
     <section class="py-16 bg-green-50">
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">What Our Customers Say</h2>
@@ -75,23 +77,42 @@
                         name: 'Andi Wijaya',
                         location: 'Jakarta',
                         rating: 5,
-                        comment: 'SEA Catering has transformed my eating habits. The meals are delicious and I\'ve never felt better!',
-                        avatar: 'A'
+                        comment: 'I\'ve been using SEA Catering for 3 months now and lost 5kg without feeling hungry! The meals are perfectly portioned and full of flavor. My favorites are the Balinese grilled fish and the tofu Buddha bowl.',
+                        avatar: 'A',
+                        date: '2 weeks ago',
+                        meals: 'Weight Loss Plan',
+                        duration: '3 months'
                     },
                     {
                         name: 'Sarah Putri',
                         location: 'Bandung',
                         rating: 4,
-                        comment: 'As a busy professional, SEA Catering saves me so much time while ensuring I eat healthy meals every day.',
-                        avatar: 'S'
+                        comment: 'As a doctor with crazy shifts, SEA Catering is a lifesaver. The meals arrive on time every morning and the packaging keeps them fresh. I just wish there were more vegan dessert options!',
+                        avatar: 'S',
+                        date: '1 month ago',
+                        meals: 'Vegan Plan',
+                        duration: '5 months'
                     },
                     {
                         name: 'Budi Santoso',
                         location: 'Surabaya',
                         rating: 5,
-                        comment: 'The customizable options are amazing. I can maintain my diet without sacrificing taste!',
-                        avatar: 'B'
-                    }
+                        comment: 'After my diabetes diagnosis, I needed to change my diet. SEA Catering made it easy with their diabetic-friendly meals that actually taste good. My blood sugar levels have never been better!',
+                        avatar: 'B',
+                        date: '3 days ago',
+                        meals: 'Diabetic Plan',
+                        duration: '2 months'
+                    },
+                    {
+                        name: 'Dewi Anggraeni',
+                        location: 'Bali',
+                        rating: 5,
+                        comment: 'The postpartum meal plan was exactly what I needed after having my baby. Nutritious, easy to heat up, and helped me recover faster. The lactation-boosting soups were especially helpful!',
+                        avatar: 'D',
+                        date: '1 week ago',
+                        meals: 'Postpartum Plan',
+                        duration: '6 weeks'
+                    },
                 ],
                 next() {
                     this.currentIndex = (this.currentIndex + 1) % this.testimonials.length;
@@ -101,7 +122,7 @@
                 }
             }" class="relative max-w-4xl mx-auto">
                 <!-- Testimonial Cards -->
-                <div class="overflow-hidden relative h-64">
+                <div class="overflow-hidden relative h-80">
                     <template x-for="(testimonial, index) in testimonials" :key="index">
                         <div 
                             x-show="currentIndex === index"
@@ -113,57 +134,98 @@
                             x-transition:leave-end="opacity-0 transform scale-90"
                             class="absolute inset-0 bg-white p-8 rounded-lg shadow-md"
                         >
-                            <div class="flex items-center mb-4">
+                            <div class="flex items-start mb-4">
                                 <div class="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold mr-4" x-text="testimonial.avatar"></div>
-                                <div>
-                                    <h4 class="font-semibold" x-text="testimonial.name"></h4>
-                                    <p class="text-gray-500 text-sm" x-text="testimonial.location"></p>
-                                    <div class="flex mt-1">
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-semibold" x-text="testimonial.name"></h4>
+                                            <p class="text-gray-500 text-sm" x-text="testimonial.location"></p>
+                                        </div>
+                                        <span class="text-gray-400 text-sm" x-text="testimonial.date"></span>
+                                    </div>
+                                    <div class="flex mt-1 mb-2">
                                         <template x-for="i in 5">
                                             <svg :class="{'text-yellow-400': i <= testimonial.rating, 'text-gray-300': i > testimonial.rating}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                                             </svg>
                                         </template>
                                     </div>
+                                    <div class="text-sm text-gray-500 mb-2">
+                                        <span x-text="testimonial.meals"></span> • 
+                                        <span x-text="testimonial.duration + ' customer'"></span>
+                                    </div>
                                 </div>
                             </div>
-                            <p class="text-gray-600 italic" x-text="'\"' + testimonial.comment + '\"'"></p>
+                            <p class="text-gray-600" x-text="'\"' + testimonial.comment + '\"'"></p>
                         </div>
                     </template>
                 </div>
                 
                 <!-- Navigation Arrows -->
-                <button @click="prev()" class="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 bg-white p-2 rounded-full shadow-md">
+                <button @click="prev()" class="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 bg-white p-2 rounded-full shadow-md hover:bg-green-50 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
-                <button @click="next()" class="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 bg-white p-2 rounded-full shadow-md">
+                <button @click="next()" class="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 bg-white p-2 rounded-full shadow-md hover:bg-green-50 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
                 </button>
+
+                <!-- Indicator Dots -->
+                <div class="flex justify-center mt-6 space-x-2">
+                    <template x-for="(testimonial, index) in testimonials" :key="index">
+                        <button @click="currentIndex = index" class="w-3 h-3 rounded-full transition" 
+                                :class="{'bg-green-600': currentIndex === index, 'bg-gray-300': currentIndex !== index}">
+                        </button>
+                    </template>
+                </div>
             </div>
 
             <!-- Testimonial Form -->
+            <!-- Updated Testimonial Form -->
             <div class="mt-16 max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
                 <h3 class="text-xl font-semibold mb-4 text-center">Share Your Experience</h3>
-                <form x-data="{
-                    formData: {
-                        name: '',
-                        rating: 0,
-                        comment: ''
-                    },
-                    hoverRating: 0,
-                    submitTestimonial() {
-                        // In a real app, this would send to backend
-                        alert('Thank you for your feedback!');
-                        this.formData = { name: '', rating: 0, comment: '' };
-                    }
-                }" @submit.prevent="submitTestimonial">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">Your Name</label>
-                        <input type="text" x-model="formData.name" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                <form @submit.prevent="addTestimonial">
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2">Your Name</label>
+                            <input type="text" x-model="newTestimonial.name" required 
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">Your Location</label>
+                            <input type="text" x-model="newTestimonial.location" required 
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2">Meal Plan</label>
+                            <select x-model="newTestimonial.meals" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <option value="">Select Plan</option>
+                                <option value="Weight Loss Plan">Weight Loss Plan</option>
+                                <option value="Vegan Plan">Vegan Plan</option>
+                                <option value="Diabetic Plan">Diabetic Plan</option>
+                                <option value="Athlete Plan">Athlete Plan</option>
+                                <option value="Postpartum Plan">Postpartum Plan</option>
+                                <option value="Custom Plan">Custom Plan</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">Duration</label>
+                            <select x-model="newTestimonial.duration" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <option value="">How long?</option>
+                                <option value="1 week">1 week</option>
+                                <option value="2 weeks">2 weeks</option>
+                                <option value="1 month">1 month</option>
+                                <option value="3 months">3 months</option>
+                                <option value="6 months+">6 months+</option>
+                            </select>
+                        </div>
                     </div>
                     
                     <div class="mb-4">
@@ -171,12 +233,12 @@
                         <div class="flex">
                             <template x-for="i in 5">
                                 <svg 
-                                    @click="formData.rating = i" 
+                                    @click="newTestimonial.rating = i" 
                                     @mouseover="hoverRating = i" 
                                     @mouseleave="hoverRating = 0"
                                     :class="{
-                                        'text-yellow-400': i <= (hoverRating || formData.rating),
-                                        'text-gray-300': i > (hoverRating || formData.rating)
+                                        'text-yellow-400': i <= (hoverRating || newTestimonial.rating),
+                                        'text-gray-300': i > (hoverRating || newTestimonial.rating)
                                     }" 
                                     class="w-8 h-8 cursor-pointer" 
                                     fill="currentColor" 
@@ -190,14 +252,81 @@
                     
                     <div class="mb-4">
                         <label class="block text-gray-700 mb-2">Your Review</label>
-                        <textarea x-model="formData.comment" required rows="4" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"></textarea>
+                        <textarea x-model="newTestimonial.comment" required rows="4" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                            placeholder="What did you like about SEA Catering? How has it helped you? Any favorite meals?"></textarea>
                     </div>
                     
-                    <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition">Submit Review</button>
+                    <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition">
+                        Submit Review
+                    </button>
                 </form>
             </div>
         </div>
     </section>
+
+    <script>
+        function testimonialSection() {
+            return {
+                currentIndex: 0,
+                hoverRating: 0,
+                testimonials: [
+                    {
+                        name: 'Andi Wijaya',
+                        location: 'Jakarta',
+                        rating: 5,
+                        comment: 'I\'ve been using SEA Catering for 3 months now and lost 5kg without feeling hungry! The meals are perfectly portioned and full of flavor. My favorites are the Balinese grilled fish and the tofu Buddha bowl.',
+                        avatar: 'A',
+                        date: '2 weeks ago',
+                        meals: 'Weight Loss Plan',
+                        duration: '3 months'
+                    },
+                    // ... (other existing testimonials) ...
+                ],
+                newTestimonial: {
+                    name: '',
+                    location: '',
+                    rating: 0,
+                    comment: '',
+                    meals: '',
+                    duration: ''
+                },
+                next() {
+                    this.currentIndex = (this.currentIndex + 1) % this.testimonials.length;
+                },
+                prev() {
+                    this.currentIndex = (this.currentIndex - 1 + this.testimonials.length) % this.testimonials.length;
+                },
+                addTestimonial() {
+                    // Create new testimonial object
+                    const newReview = {
+                        ...this.newTestimonial,
+                        avatar: this.newTestimonial.name.charAt(0),
+                        date: 'Just now'
+                    };
+                    
+                    // Add to beginning of testimonials array
+                    this.testimonials.unshift(newReview);
+                    
+                    // Reset form
+                    this.newTestimonial = {
+                        name: '',
+                        location: '',
+                        rating: 0,
+                        comment: '',
+                        meals: '',
+                        duration: ''
+                    };
+                    
+                    // Show the new testimonial
+                    this.currentIndex = 0;
+                    
+                    // Show success message
+                    alert('Thank you for your review!');
+                }
+            }
+        }
+        </script>
 
     <!-- CTA Section -->
     <section class="py-16 bg-green-600 text-white">

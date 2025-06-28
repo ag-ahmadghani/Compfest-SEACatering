@@ -43,17 +43,17 @@
                                     </div>
                                     
                                 </div>
-                                
-                                <button class="mt-6 w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition">
-                                    Subscribe Now
-                                </button>
+                                <a href="{{ route('subscription.customize', $plan->id) }}">
+        
+                                    <button class="mt-6 w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition">
+                                        Subscribe Now
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
                 @endforeach
-                
-                <!-- Add more meal plans as needed -->
             </div>
         </div>
     </section>

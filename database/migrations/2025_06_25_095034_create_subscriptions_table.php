@@ -12,6 +12,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('meal_plan_id')->constrained();
+            $table->string('name');
+            $table->string('phone')->nullable();
+            $table->text('allergies')->nullable();
+            $table->decimal('total_price', 12, 2);
             $table->date('start_date');
             $table->date('end_date')->nullable();
             $table->enum('status', ['active', 'paused', 'cancelled'])->default('active');

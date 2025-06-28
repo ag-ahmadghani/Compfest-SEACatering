@@ -15,7 +15,7 @@
                         formData: {
                             name: '',
                             email: '',
-                            phone: '',
+                            phone_number: '',
                             subject: 'General Inquiry',
                             message: ''
                         },
@@ -30,7 +30,7 @@
                                 this.formData = { 
                                     name: '', 
                                     email: '', 
-                                    phone: '', 
+                                    phone_number: '', 
                                     subject: 'General Inquiry', 
                                     message: '' 
                                 };
@@ -58,8 +58,8 @@
                         </div>
 
                         <div class="mb-6">
-                            <label for="phone" class="block text-gray-700 mb-2 font-medium">Phone Number</label>
-                            <input type="tel" id="phone" x-model="formData.phone"
+                            <label for="phone_number" class="block text-gray-700 mb-2 font-medium">Phone Number</label>
+                            <input type="tel" id="phone_number" x-model="formData.phone"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
                                    placeholder="+62">
                         </div>

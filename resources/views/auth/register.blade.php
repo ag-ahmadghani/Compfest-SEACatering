@@ -36,8 +36,8 @@
 
                     <!-- Phone -->
                     <div class="mb-6">
-                        <label for="phone" class="block text-gray-700 mb-2 font-medium">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" value="{{ old('phone') }}" required
+                        <label for="phone_number" class="block text-gray-700 mb-2 font-medium">Phone Number</label>
+                        <input type="tel" id="phone_number" name="phone_number" value="{{ old('phone_number') }}" required
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
                                placeholder="+62 812 3456 7890">
                     </div>

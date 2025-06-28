@@ -22,7 +22,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required|string|max:20',
+            'phone_number' => 'required|string|max:20',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'terms' => 'required|accepted',
         ]);
@@ -30,7 +30,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->phone,
+            'phone_number' => $request->phone_number,
             'password' => Hash::make($request->password),
             'role' => 'customer', // Default role
             'status' => 'active'  // Default status

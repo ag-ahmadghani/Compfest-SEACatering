@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class SubscriptionMealType extends Model
 {
     protected $fillable = ['subscription_id', 'meal_type'];
+
+    public function Subscription(): BelongsTo
+    {
+        return $this->belongsTo(Subscription::class);
+    }
 }

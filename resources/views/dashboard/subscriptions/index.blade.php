@@ -4,19 +4,8 @@
         <div class="flex justify-between items-center">
             <div>
                 <h2 class="text-2xl font-bold dark:text-white">Subscriptions</h2>
-                <p class="text-gray-600 dark:text-gray-400 mt-1">Manage customer subscriptions</p>
+                <p class="text-gray-600 dark:text-gray-400 mt-1">Manage customer meal subscriptions</p>
             </div>
-            @if (Auth::user()->role === 'admin')
-            <div>
-                <a href="{{ route('dashboard.subscriptions.create') }}" 
-                   class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                    Add New
-                </a>
-            </div>
-            @endif
         </div>
 
         <!-- Subscriptions Table -->
@@ -32,7 +21,10 @@
                                 Meal Plan
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                                Period
+                                Meals & Days
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+                                Total Price
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
                                 Status
@@ -52,10 +44,10 @@
                                         </div>
                                         <div class="ml-4">
                                             <div class="text-sm font-medium text-gray-900 dark:text-white">
-                                                {{ $subscription->user->name }}
+                                                {{ $subscription->name }}
                                             </div>
                                             <div class="text-sm text-gray-500 dark:text-gray-400">
-                                                {{ $subscription->user->email }}
+                                                {{ $subscription->phone }}
                                             </div>
                                         </div>
                                     </div>
@@ -65,12 +57,35 @@
                                         {{ $subscription->mealPlan->plan_name }}
                                     </div>
                                     <div class="text-sm text-gray-500 dark:text-gray-400">
-                                        Rp {{ number_format($subscription->mealPlan->price, 0, ',', '.') }}
+                                        Rp {{ number_format($subscription->mealPlan->price, 0, ',', '.') }}/meal
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                    {{ $subscription->start_date->format('d M Y') }} - 
-                                    {{ $subscription->end_date?->format('d M Y') ?? 'Ongoing' }}
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900 dark:text-white">
+                                        <div class="font-medium mb-1">Meals:</div>
+                                        <div class="flex flex-wrap gap-1 mb-2">
+                                            @foreach($subscription->mealTypes as $mealType)
+                                                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full dark:bg-green-900 dark:text-green-200">
+                                                    {{ ucfirst($mealType->meal_type) }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                        <div class="font-medium mb-1">Days:</div>
+                                        <div class="flex flex-wrap gap-1">
+                                            @foreach($subscription->deliveryDays as $day)
+                                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full dark:bg-blue-900 dark:text-blue-200">
+                                                    {{ ucfirst($day->day) }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                    Rp {{ number_format($subscription->total_price, 0, ',', '.') }}
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">
+                                        {{ \Carbon\Carbon::parse($subscription->start_date)->format('d M Y') }} - 
+    {{ $subscription->end_date ? \Carbon\Carbon::parse($subscription->end_date)->format('d M Y') : 'Ongoing' }}
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
@@ -79,6 +94,11 @@
                                            'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300') }}">
                                         {{ ucfirst($subscription->status) }}
                                     </span>
+                                    @if($subscription->allergies)
+                                    <div class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                        Allergies: {{ Str::limit($subscription->allergies, 20) }}
+                                    </div>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <div class="flex items-center space-x-2">

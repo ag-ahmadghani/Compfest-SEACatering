@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\MealPlan;
 use Illuminate\Http\Request;
 
@@ -17,6 +17,17 @@ class MealPlanController extends Controller
     {
         $mealPlans = MealPlan::all();
         return view('menu', compact('mealPlans'));
+    }
+
+    public function subscription_show()
+    {
+        $mealPlans = MealPlan::all();
+        return view('subscriptions.subscription', compact('mealPlans'));
+    }
+
+    public function subscription_add(MealPlan $Plan)
+    {
+        return view('subscriptions.customize', compact('Plan'));
     }
 
     public function create()

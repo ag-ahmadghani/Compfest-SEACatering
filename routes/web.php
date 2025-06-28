@@ -7,45 +7,51 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 
 // Admin Dashboard Routes
-Route::prefix('dashboard')->middleware('auth')->group(function() {
-    // Dashboard
-    Route::get('/', function () {
-        return view('dashboard.dashboard');
-    })->name('dashboard');
+Route::middleware('auth')->group(function() {
 
-    
-    // Subscriptions - Using SubscriptionController
-    Route::prefix('subscriptions')->controller(SubscriptionController::class)->group(function() {
-        Route::get('/', 'index')->name('dashboard.subscriptions.index');
-        Route::patch('/{subscription}/cancel', 'cancel')->name('dashboard.subscriptions.cancel');
-    });
-    
-    // Users
-    Route::prefix('users')->controller(UserController::class)->group(function() {
-        Route::get('/', 'index')->name('dashboard.users.index');
-        Route::get('/{user}/edit', 'edit')->name('dashboard.users.edit');
-        Route::put('/{user}', 'update')->name('dashboard.users.update');
-        Route::patch('/{user}/toggle-status', 'toggleStatus')->name('dashboard.users.toggle-status');
-    });
-    
-    Route::middleware('role:admin')->group(function () {
+    Route::get('/subscription/customize/{Plan}', [MealPlanController::class, 'subscription_add'])->name('subscription.customize');
+    // Process subscription
+    Route::post('/subscriptions', [SubscriptionController::class, 'store'])
+    ->name('subscriptions.store');
+
+    Route::prefix('dashboard')->group(function () {    
+        // Dashboard
+        Route::get('/', function () {
+            return view('dashboard.dashboard');
+        })->name('dashboard');
+
+        
+        // Subscriptions - Using SubscriptionController
         Route::prefix('subscriptions')->controller(SubscriptionController::class)->group(function() {
-            Route::get('/create', 'create')->name('dashboard.subscriptions.create');
-            Route::post('/', 'store')->name('dashboard.subscriptions.store');
-            Route::get('/{subscription}/edit', 'edit')->name('dashboard.subscriptions.edit');
-            Route::put('/{subscription}', 'update')->name('dashboard.subscriptions.update');
-        });
-        // Meal Plans - Using MealPlanController
-        Route::prefix('meal-plans')->controller(MealPlanController::class)->group(function() {
-            Route::get('/', 'index')->name('dashboard.meal-plans.index');
-            Route::get('/create', 'create')->name('dashboard.meal-plans.create');
-            Route::post('/', 'store')->name('dashboard.meal-plans.store');
-            Route::get('/{mealPlan}/edit', 'edit')->name('dashboard.meal-plans.edit');
-            Route::put('/{mealPlan}', 'update')->name('dashboard.meal-plans.update');
-            Route::delete('/{mealPlan}', 'destroy')->name('dashboard.meal-plans.destroy');
-            Route::post('/{mealPlan}/toggle-status', 'toggleStatus')->name('dashboard.meal-plans.toggle-status');
+            Route::get('/', 'index')->name('dashboard.subscriptions.index');
+            Route::patch('/{subscription}/cancel', 'cancel')->name('dashboard.subscriptions.cancel');
         });
         
+        // Users
+        Route::prefix('users')->controller(UserController::class)->group(function() {
+            Route::get('/', 'index')->name('dashboard.users.index');
+            Route::get('/{user}/edit', 'edit')->name('dashboard.users.edit');
+            Route::put('/{user}', 'update')->name('dashboard.users.update');
+            Route::patch('/{user}/toggle-status', 'toggleStatus')->name('dashboard.users.toggle-status');
+        });
+        
+        Route::middleware('role:admin')->group(function () {
+            Route::prefix('subscriptions')->controller(SubscriptionController::class)->group(function() {
+                Route::get('/{subscription}/edit', 'edit')->name('dashboard.subscriptions.edit');
+                Route::put('/{subscription}', 'update')->name('dashboard.subscriptions.update');
+            });
+            // Meal Plans - Using MealPlanController
+            Route::prefix('meal-plans')->controller(MealPlanController::class)->group(function() {
+                Route::get('/', 'index')->name('dashboard.meal-plans.index');
+                Route::get('/create', 'create')->name('dashboard.meal-plans.create');
+                Route::post('/', 'store')->name('dashboard.meal-plans.store');
+                Route::get('/{mealPlan}/edit', 'edit')->name('dashboard.meal-plans.edit');
+                Route::put('/{mealPlan}', 'update')->name('dashboard.meal-plans.update');
+                Route::delete('/{mealPlan}', 'destroy')->name('dashboard.meal-plans.destroy');
+                Route::post('/{mealPlan}/toggle-status', 'toggleStatus')->name('dashboard.meal-plans.toggle-status');
+            });
+            
+        });
     });
 });
 
@@ -54,12 +60,9 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-
 Route::get('/menu', [MealPlanController::class, 'public_show'])->name('meal-plan.public');
 
-Route::get('/subscription', function () {
-    return view('subscription');
-})->name('subscription');
+Route::get('/subscription', [MealPlanController::class, 'subscription_show'])->name('subscription');
 
 Route::get('/contact', function () {
     return view('contact');
