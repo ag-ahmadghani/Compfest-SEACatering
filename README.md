@@ -7,7 +7,7 @@ Langkah langkah menggunakan web ini (Setelah Clone Project ini):
 2. Copy file .env.example dan paste dengan nama.env dan sesuaikan settingan root yang ada didalamnya dengan yang kamu punya
 3. Buat database dengan nama "seacatering"
 4. Jalankan "php artisan migrate" pada terminal project ini
-5. Jalankan "php artisan db:seed" untuk membuat akun admin bawaan
+5. Jalankan "php artisan db:seed" untuk membuat akun admin bawaan dengan isi (email:admin@seacatering.com dan password:admin123)
 
 urusan dengan database sudah selesai, sekarang kita lanjut untuk menampilkan di web browser
 
@@ -16,7 +16,7 @@ Menggunakan laragon:
 2. Buka Laragon
 3. "Start All" pada laragon
 4. Ketik "npm run dev" pada terminal untuk menjalankan tailwindcss
-5. buka browser dan ketik "compfest-seacatering-ahmadghani.test" -> jika bawaan tau tidak diganti pada browser atau sesuaikan nama dengan folder yang sudah kalian clone
+5. buka browser dan ketik "compfest-seacatering-ahmadghani.test" -> jika bawaan dan tidak diganti pada browser atau sesuaikan nama dengan folder yang sudah kalian clone
 
 Menggunakan XAMPP:
 1. Pastikan clone project pada folder htdocs pada xampp anda
